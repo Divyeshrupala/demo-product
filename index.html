@@ -1,0 +1,686 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Explore NanoEra Medicare research nanomaterials across seven catalogue categories.">
+  <title>Research Nanomaterials | NanoEra Medicare</title>
+  <style>
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; font-family: Arial, Helvetica, sans-serif; line-height: 1.6; color: #333; }
+    a { color: inherit; text-decoration: none; }
+    .header { position: sticky; top: 0; z-index: 10; display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 16px 40px; background: #fff; box-shadow: 0 2px 10px rgba(0,0,0,.1); }
+    .logo { flex-shrink: 0; color: #1a365d; font-size: 1.65rem; font-weight: 700; }
+    .nav { display: flex; align-items: center; flex-wrap: wrap; gap: 23px; color: #111; font-size: .92rem; font-weight: 500; }
+    .nav-item { position: relative; white-space: nowrap; }
+    .nav-item.active { color: #3b82f6; font-weight: 600; }
+    .nav-item.active::after { position: absolute; right: 0; bottom: -9px; left: 0; height: 2px; background: #3b82f6; content: ''; }
+    .products-page { min-height: 100vh; background: #f7fafc; }
+    .products-hero { padding: 5rem 1.5rem; text-align: center; color: #fff; background: linear-gradient(135deg,#0f172a 0%,#1e3a5f 55%,#2563a8 100%); }
+    .products-eyebrow { margin: 0 0 .75rem; color: #bfdbfe; font-size: .9rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+    .products-hero h1 { margin: 0 0 1rem; font-size: clamp(2rem,5vw,3.25rem); line-height: 1.15; }
+    .products-hero > p:last-child { max-width: 650px; margin: 0 auto; color: #e2e8f0; font-size: 1.1rem; line-height: 1.7; }
+    .products-section { max-width: 1200px; margin: 0 auto; padding: 4.5rem 1.5rem; }
+    .products-intro { max-width: 700px; margin: 0 auto 2.5rem; text-align: center; }
+    .products-intro h2,.products-catalogue h2 { margin: 0 0 .75rem; color: #1a365d; font-size: clamp(1.6rem,3vw,2.1rem); }
+    .products-intro p,.products-catalogue p { margin: 0; color: #4a5568; line-height: 1.7; }
+    .products-controls { display: grid; grid-template-columns: minmax(0,2fr) minmax(250px,1fr); gap: 1rem; margin-bottom: 1rem; }
+    .products-search,.products-category-filter { display: flex; flex-direction: column; gap: .45rem; color: #1a365d; font-size: .9rem; font-weight: 700; }
+    .products-search input,.products-category-filter select { width: 100%; min-height: 46px; padding: .7rem .85rem; border: 1px solid #cbd5e1; border-radius: 8px; background: #fff; color: #1a365d; font: inherit; font-weight: 400; }
+    .products-search input:focus,.products-category-filter select:focus { outline: 3px solid #bfdbfe; border-color: #2563a8; }
+    .products-result-count { margin: 0 0 2rem; color: #64748b; font-size: .9rem; }
+    .product-category-section { margin-top: 3rem; }
+    .product-category-section h3 { margin: 0 0 1.25rem; color: #1a365d; font-size: clamp(1.35rem,2.5vw,1.75rem); }
+    .products-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(min(100%,290px),1fr)); gap: 1.5rem; }
+    .product-card { display: flex; min-height: 280px; flex-direction: column; padding: 1.75rem; border: 1px solid #e2e8f0; border-radius: 14px; background: #fff; box-shadow: 0 8px 24px rgba(26,54,93,.08); }
+    .product-card-heading { display: flex; flex-wrap: wrap; align-items: center; gap: .6rem; margin-bottom: 1.25rem; }
+    .product-code { padding: .35rem .65rem; border-radius: 999px; background: #eff6ff; color: #1d4ed8; font-size: .8rem; font-weight: 700; }
+    .product-category { color: #64748b; font-size: .8rem; font-weight: 600; }
+    .product-card h4 { margin: 0 0 .75rem; color: #1a365d; font-size: 1.35rem; line-height: 1.35; }
+    .product-card > p { margin: 0; color: #4a5568; line-height: 1.7; }
+    .products-empty-state { padding: 2rem; border: 1px solid #e2e8f0; border-radius: 14px; background: #fff; color: #4a5568; text-align: center; }
+    .products-catalogue { display: flex; max-width: 1200px; align-items: center; justify-content: space-between; gap: 2rem; margin: 0 auto 4.5rem; padding: 2rem; border-radius: 14px; background: #eaf2fb; }
+    .products-catalogue h2 { font-size: 1.5rem; }
+    .products-catalogue-note { flex: 0 0 auto; padding: .8rem 1.1rem; border-radius: 6px; background: #1a365d; color: #fff; font-weight: 700; }
+    .footer { padding: 44px 20px 20px; background: #1a365d; color: #fff; }
+    .footer-inner { display: flex; max-width: 1200px; align-items: center; justify-content: space-between; gap: 24px; margin: 0 auto; }
+    .footer h2 { margin: 0 0 8px; font-size: 1.45rem; }
+    .footer p { margin: 0; color: #cbd5e0; }
+    .footer-bottom { max-width: 1200px; margin: 30px auto 0; padding-top: 18px; border-top: 1px solid #2d3748; color: #a0aec0; font-size: .875rem; }
+    @media (max-width:1024px) { .header { align-items: flex-start; flex-direction: column; padding: 15px 20px; gap: 12px; } .nav { gap: 16px; } .nav-item { padding: 4px 0; } .nav-item.active::after { bottom: -3px; } }
+    @media (max-width:768px) { .products-hero { padding: 3.5rem 1.25rem; } .products-section { padding: 3rem 1.25rem; } .products-controls { grid-template-columns: 1fr; } .products-catalogue { align-items: flex-start; flex-direction: column; margin: 0 1.25rem 3rem; padding: 1.5rem; } .footer-inner { align-items: flex-start; flex-direction: column; } }
+    @media (max-width:480px) { .logo { font-size: 1.35rem; } .product-card { padding: 1.35rem; } }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="logo">Dr. Ranu Dutta</div>
+    <nav class="nav" aria-label="Main navigation">
+      <span class="nav-item">Home</span>
+      <span class="nav-item">NanoEra Medicare</span>
+      <span class="nav-item">Expertise</span>
+      <span class="nav-item active" aria-current="page">Products</span>
+      <span class="nav-item">Skilling &amp; Courses</span>
+      <span class="nav-item">Aadishakti-IKS</span>
+      <span class="nav-item">Join Us</span>
+      <span class="nav-item">Services</span>
+      <span class="nav-item">Contact</span>
+    </nav>
+  </header>
+  <main class="products-page">
+    <section class="products-hero">
+      <p class="products-eyebrow">NanoEra Medicare Pvt. Ltd.</p>
+      <h1>Research Nanomaterials</h1>
+      <p>Explore selected materials from the NanoEra Medicare Product Catalogue 2026?27.</p>
+    </section>
+    <section class="products-section" aria-labelledby="products-heading">
+      <div class="products-intro">
+        <h2 id="products-heading">Catalogue products</h2>
+        <p>Explore our research materials across seven catalogue categories.</p>
+      </div>
+      <section class="product-category-section" aria-labelledby="category-0">
+        <h3 id="category-0">Rare-Earth &amp; Luminescent Nanomaterials</h3>
+        <div class="products-grid">
+        <article class="product-card">
+          <div class="product-card-heading">
+            <span class="product-code">NE-RE-001</span>
+            <span class="product-category">Rare-Earth &amp; Luminescent Nanomaterials</span>
+          </div>
+          <h4>Gadolinium Oxide (Gd₂O₃) Nanoparticles</h4>
+          <p>Research grade; particle size and surface functionalization on request.</p>
+        </article>
+        <article class="product-card">
+          <div class="product-card-heading">
+            <span class="product-code">NE-RE-002</span>
+            <span class="product-category">Rare-Earth &amp; Luminescent Nanomaterials</span>
+          </div>
+          <h4>Europium Oxide (Eu₂O₃) Nanoparticles</h4>
+          <p>For luminescent-material research.</p>
+        </article>
+        <article class="product-card">
+          <div class="product-card-heading">
+            <span class="product-code">NE-RE-003</span>
+            <span class="product-category">Rare-Earth &amp; Luminescent Nanomaterials</span>
+          </div>
+          <h4>Terbium Oxide (Tb₄O₇) Nanoparticles</h4>
+          <p>For optical and phosphor research.</p>
+        </article>
+        <article class="product-card">
+          <div class="product-card-heading">
+            <span class="product-code">NE-RE-004</span>
+            <span class="product-category">Rare-Earth &amp; Luminescent Nanomaterials</span>
+          </div>
+          <h4>Yttrium Oxide (Y₂O₃) Nanoparticles</h4>
+          <p>For host matrix, ceramic and optical research.</p>
+        </article>
+        <article class="product-card">
+          <div class="product-card-heading">
+            <span class="product-code">NE-RE-005</span>
+            <span class="product-category">Rare-Earth &amp; Luminescent Nanomaterials</span>
+          </div>
+          <h4>Neodymium Oxide (Nd₂O₃) Nanoparticles</h4>
+          <p>For optical and functional-material research.</p>
+        </article>
+        <article class="product-card">
+          <div class="product-card-heading">
+            <span class="product-code">NE-RE-006</span>
+            <span class="product-category">Rare-Earth &amp; Luminescent Nanomaterials</span>
+          </div>
+          <h4>Erbium Oxide (Er₂O₃) Nanoparticles</h4>
+          <p>For near-infrared and photonics research.</p>
+        </article>
+        <article class="product-card">
+          <div class="product-card-heading">
+            <span class="product-code">NE-RE-007</span>
+            <span class="product-category">Rare-Earth &amp; Luminescent Nanomaterials</span>
+          </div>
+          <h4>Y₂O₃:Eu³⁺ Nanophosphor</h4>
+          <p>Custom dopant concentration for phosphor research.</p>
+        </article>
+        <article class="product-card">
+          <div class="product-card-heading">
+            <span class="product-code">NE-RE-008</span>
+            <span class="product-category">Rare-Earth &amp; Luminescent Nanomaterials</span>
+          </div>
+          <h4>YBO₃:Eu³⁺ Nanophosphor</h4>
+          <p>Red-emitting research phosphor.</p>
+        </article>
+        <article class="product-card">
+          <div class="product-card-heading">
+            <span class="product-code">NE-RE-009</span>
+            <span class="product-category">Rare-Earth &amp; Luminescent Nanomaterials</span>
+          </div>
+          <h4>YBO₃:Tb³⁺ Nanophosphor</h4>
+          <p>Green-emitting research phosphor.</p>
+        </article>
+        <article class="product-card">
+          <div class="product-card-heading">
+            <span class="product-code">NE-RE-010</span>
+            <span class="product-category">Rare-Earth &amp; Luminescent Nanomaterials</span>
+          </div>
+          <h4>Gd-Based Luminescent / Magnetic Compositions</h4>
+          <p>Custom research formulation.</p>
+        </article>
+        <article class="product-card">
+          <div class="product-card-heading">
+            <span class="product-code">NE-RE-011</span>
+            <span class="product-category">Rare-Earth &amp; Luminescent Nanomaterials</span>
+          </div>
+          <h4>Upconversion Nanoparticle Systems</h4>
+          <p>Custom host and dopant design.</p>
+        </article>
+        <article class="product-card">
+          <div class="product-card-heading">
+            <span class="product-code">NE-RE-012</span>
+            <span class="product-category">Rare-Earth &amp; Luminescent Nanomaterials</span>
+          </div>
+          <h4>Rare-Earth Doped Oxide Nanomaterials</h4>
+          <p>Application-specific custom synthesis.</p>
+        </article>
+        </div>
+      </section>
+      <section class="product-category-section" aria-labelledby="category-1">
+        <h3 id="category-1">Semiconductor Nanomaterials</h3>
+        <div class="products-grid">
+        <article class="product-card">
+          <div class="product-card-heading">
+            <span class="product-code">NE-SC-001</span>
+            <span class="product-category">Semiconductor Nanomaterials</span>
+          </div>
+          <h4>Zinc Oxide (ZnO) Nanoparticles</h4>
+          <p>Nanomaterial for research applications involving sensors, optoelectronics, coatings and functional semiconductor systems.</p>
+        </article>
+        <article class="product-card">
+          <div class="product-card-heading">
+            <span class="product-code">NE-SC-002</span>
+            <span class="product-category">Semiconductor Nanomaterials</span>
+          </div>
+          <h4>Titanium Dioxide (TiO₂) Nanoparticles</h4>
+          <p>Anatase and rutile research variants.</p>
+        </article>
+        <article class="product-card">
+          <div class="product-card-heading">
+            <span class="product-code">NE-SC-003</span>
+            <span class="product-category">Semiconductor Nanomaterials</span>
+          </div>
+          <h4>Tin Oxide (SnO₂) Nanoparticles</h4>
+          <p>For gas-sensing and electronic-materials research.</p>
+        </article>
+        <article class="product-card">
+          <div class="product-card-heading">
+            <span class="product-code">NE-SC-004</span>
+            <span class="product-category">Semiconductor Nanomaterials</span>
+          </div>
+          <h4>Tungsten Oxide (WO₃) Nanoparticles</h4>
+          <p>For electrochromic and sensing research.</p>
+        </article>
+        <article class="product-card">
+          <div class="product-card-heading">
+            <span class="product-code">NE-SC-005</span>
+            <span class="product-category">Semiconductor Nanomaterials</span>
+          </div>
+          <h4>Copper Oxide (CuO) Nanoparticles</h4>
+          <p>For catalysis and sensing research.</p>
+        </article>
+        <article class="product-card">
+          <div class="product-card-heading">
+            <span class="product-code">NE-SC-006</span>
+            <span class="product-category">Semiconductor Nanomaterials</span>
+          </div>
+          <h4>Nickel Oxide (NiO) Nanoparticles</h4>
+          <p>For electrochemical and sensing research.</p>
+        </article>
+        <article class="product-card">
+          <div class="product-card-heading">
+            <span class="product-code">NE-SC-007</span>
+            <span class="product-category">Semiconductor Nanomaterials</span>
+          </div>
+          <h4>Iron Oxide (Fe₂O₃) Nanoparticles</h4>
+          <p>For functional semiconductor and catalytic research.</p>
+        </article>
+        <article class="product-card">
+          <div class="product-card-heading">
+            <span class="product-code">NE-SC-008</span>
+            <span class="product-category">Semiconductor Nanomaterials</span>
+          </div>
+          <h4>Cadmium Sulfide (CdS) Nanoparticles</h4>
+          <p>Research-use semiconductor material.</p>
+        </article>
+        <article class="product-card">
+          <div class="product-card-heading">
+            <span class="product-code">NE-SC-009</span>
+            <span class="product-category">Semiconductor Nanomaterials</span>
+          </div>
+          <h4>Zinc Sulfide (ZnS) Nanoparticles</h4>
+          <p>For optical and luminescent research.</p>
+        </article>
+        <article class="product-card">
+          <div class="product-card-heading">
+            <span class="product-code">NE-SC-010</span>
+            <span class="product-category">Semiconductor Nanomaterials</span>
+          </div>
+          <h4>Molybdenum Disulfide (MoS₂) Nanomaterial</h4>
+          <p>For 2D-material and sensor research.</p>
+        </article>
+        <article class="product-card">
+          <div class="product-card-heading">
+            <span class="product-code">NE-SC-011</span>
+            <span class="product-category">Semiconductor Nanomaterials</span>
+          </div>
+          <h4>Bismuth Telluride (Bi₂Te₃) Nanomaterial</h4>
+          <p>For thermoelectric research.</p>
+        </article>
+        <article class="product-card">
+          <div class="product-card-heading">
+            <span class="product-code">NE-SC-012</span>
+            <span class="product-category">Semiconductor Nanomaterials</span>
+          </div>
+          <h4>Custom Doped Semiconductor Nanoparticles</h4>
+          <p>AI/ML-assisted composition studies are available through the catalogue offering.</p>
+        </article>
+        </div>
+      </section>
+      <section class="product-category-section" aria-labelledby="category-2">
+        <h3 id="category-2">Magnetic, Ferrite &amp; Imaging Materials</h3>
+        <div class="products-grid">
+        <article class="product-card">
+          <div class="product-card-heading">
+            <span class="product-code">NE-MG-001</span>
+            <span class="product-category">Magnetic, Ferrite &amp; Imaging Materials</span>
+          </div>
+          <h4>Magnetite (Fe₃O₄) Nanoparticles</h4>
+          <p>Magnetic and superparamagnetic research variants.</p>
+        </article>
+        <article class="product-card">
+          <div class="product-card-heading">
+            <span class="product-code">NE-MG-002</span>
+            <span class="product-category">Magnetic, Ferrite &amp; Imaging Materials</span>
+          </div>
+          <h4>Cobalt Ferrite (CoFe₂O₄) Nanoparticles</h4>
+          <p>For magnetic sensing research.</p>
+        </article>
+        <article class="product-card">
+          <div class="product-card-heading">
+            <span class="product-code">NE-MG-003</span>
+            <span class="product-category">Magnetic, Ferrite &amp; Imaging Materials</span>
+          </div>
+          <h4>Nickel Ferrite (NiFe₂O₄) Nanoparticles</h4>
+          <p>For magnetic and catalytic research.</p>
+        </article>
+        <article class="product-card">
+          <div class="product-card-heading">
+            <span class="product-code">NE-MG-004</span>
+            <span class="product-category">Magnetic, Ferrite &amp; Imaging Materials</span>
+          </div>
+          <h4>Zinc Ferrite (ZnFe₂O₄) Nanoparticles</h4>
+          <p>For magnetic and photocatalytic research.</p>
+        </article>
+        <article class="product-card">
+          <div class="product-card-heading">
+            <span class="product-code">NE-MG-005</span>
+            <span class="product-category">Magnetic, Ferrite &amp; Imaging Materials</span>
+          </div>
+          <h4>Manganese Ferrite (MnFe₂O₄) Nanoparticles</h4>
+          <p>For magnetic-materials research.</p>
+        </article>
+        <article class="product-card">
+          <div class="product-card-heading">
+            <span class="product-code">NE-MG-006</span>
+            <span class="product-category">Magnetic, Ferrite &amp; Imaging Materials</span>
+          </div>
+          <h4>Gadolinium-Based Nanomaterials</h4>
+          <p>For MRI contrast-material research.</p>
+        </article>
+        <article class="product-card">
+          <div class="product-card-heading">
+            <span class="product-code">NE-MG-007</span>
+            <span class="product-category">Magnetic, Ferrite &amp; Imaging Materials</span>
+          </div>
+          <h4>Magnetofluorescent Nanocomposites</h4>
+          <p>Custom multimodal research formulation.</p>
+        </article>
+        <article class="product-card">
+          <div class="product-card-heading">
+            <span class="product-code">NE-MG-008</span>
+            <span class="product-category">Magnetic, Ferrite &amp; Imaging Materials</span>
+          </div>
+          <h4>Surface-Functionalized Magnetic Nanoparticles</h4>
+          <p>Ligand, polymer or biomolecule functionalization on request.</p>
+        </article>
+        <article class="product-card">
+          <div class="product-card-heading">
+            <span class="product-code">NE-MG-009</span>
+            <span class="product-category">Magnetic, Ferrite &amp; Imaging Materials</span>
+          </div>
+          <h4>Magnetic Nanoparticle Dispersions</h4>
+          <p>Aqueous or compatible media on request.</p>
+        </article>
+        </div>
+      </section>
+      <section class="product-category-section" aria-labelledby="category-3">
+        <h3 id="category-3">Metal, Metal-Oxide &amp; Plasmonic Materials</h3>
+        <div class="products-grid">
+        <article class="product-card">
+          <div class="product-card-heading">
+            <span class="product-code">NE-MM-001</span>
+            <span class="product-category">Metal, Metal-Oxide &amp; Plasmonic Materials</span>
+          </div>
+          <h4>Silver (Ag) Nanoparticles</h4>
+          <p>Research material for plasmonic applications, antimicrobial studies and SERS research.</p>
+        </article>
+        <article class="product-card">
+          <div class="product-card-heading">
+            <span class="product-code">NE-MM-002</span>
+            <span class="product-category">Metal, Metal-Oxide &amp; Plasmonic Materials</span>
+          </div>
+          <h4>Gold (Au) Nanoparticles</h4>
+          <p>For biosensing, optical and conjugation research.</p>
+        </article>
+        <article class="product-card">
+          <div class="product-card-heading">
+            <span class="product-code">NE-MM-003</span>
+            <span class="product-category">Metal, Metal-Oxide &amp; Plasmonic Materials</span>
+          </div>
+          <h4>Copper (Cu) Nanoparticles</h4>
+          <p>For conductive and catalytic research.</p>
+        </article>
+        <article class="product-card">
+          <div class="product-card-heading">
+            <span class="product-code">NE-MM-004</span>
+            <span class="product-category">Metal, Metal-Oxide &amp; Plasmonic Materials</span>
+          </div>
+          <h4>Nickel (Ni) Nanoparticles</h4>
+          <p>For catalytic and magnetic research.</p>
+        </article>
+        <article class="product-card">
+          <div class="product-card-heading">
+            <span class="product-code">NE-MM-005</span>
+            <span class="product-category">Metal, Metal-Oxide &amp; Plasmonic Materials</span>
+          </div>
+          <h4>Cobalt (Co) Nanoparticles</h4>
+          <p>For magnetic and catalytic research.</p>
+        </article>
+        <article class="product-card">
+          <div class="product-card-heading">
+            <span class="product-code">NE-MM-006</span>
+            <span class="product-category">Metal, Metal-Oxide &amp; Plasmonic Materials</span>
+          </div>
+          <h4>Aluminium Oxide (Al₂O₃) Nanoparticles</h4>
+          <p>For ceramic and coating research.</p>
+        </article>
+        <article class="product-card">
+          <div class="product-card-heading">
+            <span class="product-code">NE-MM-007</span>
+            <span class="product-category">Metal, Metal-Oxide &amp; Plasmonic Materials</span>
+          </div>
+          <h4>Cerium Oxide (CeO₂) Nanoparticles</h4>
+          <p>For catalysis, redox and biomedical research.</p>
+        </article>
+        <article class="product-card">
+          <div class="product-card-heading">
+            <span class="product-code">NE-MM-008</span>
+            <span class="product-category">Metal, Metal-Oxide &amp; Plasmonic Materials</span>
+          </div>
+          <h4>Zirconium Oxide (ZrO₂) Nanoparticles</h4>
+          <p>For ceramic and biomedical research.</p>
+        </article>
+        <article class="product-card">
+          <div class="product-card-heading">
+            <span class="product-code">NE-MM-009</span>
+            <span class="product-category">Metal, Metal-Oxide &amp; Plasmonic Materials</span>
+          </div>
+          <h4>Silicon Oxide (SiO₂) Nanoparticles</h4>
+          <p>For carrier, coating and composite research.</p>
+        </article>
+        <article class="product-card">
+          <div class="product-card-heading">
+            <span class="product-code">NE-MM-010</span>
+            <span class="product-category">Metal, Metal-Oxide &amp; Plasmonic Materials</span>
+          </div>
+          <h4>Silver-Gold / Bimetallic Nanostructures</h4>
+          <p>Custom plasmonic research systems.</p>
+        </article>
+        </div>
+      </section>
+      <section class="product-category-section" aria-labelledby="category-4">
+        <h3 id="category-4">Customized Carbon, Graphene &amp; Nanotube Materials</h3>
+        <div class="products-grid">
+        <article class="product-card">
+          <div class="product-card-heading">
+            <span class="product-code">NE-CB-001</span>
+            <span class="product-category">Customized Carbon, Graphene &amp; Nanotube Materials</span>
+          </div>
+          <h4>Graphene Nanopowder</h4>
+          <p>Research grade.</p>
+        </article>
+        <article class="product-card">
+          <div class="product-card-heading">
+            <span class="product-code">NE-CB-002</span>
+            <span class="product-category">Customized Carbon, Graphene &amp; Nanotube Materials</span>
+          </div>
+          <h4>Graphene Oxide (GO)</h4>
+          <p>Carbon-based nanomaterial available in powder or dispersion formats for research applications.</p>
+        </article>
+        <article class="product-card">
+          <div class="product-card-heading">
+            <span class="product-code">NE-CB-003</span>
+            <span class="product-category">Customized Carbon, Graphene &amp; Nanotube Materials</span>
+          </div>
+          <h4>Reduced Graphene Oxide (rGO)</h4>
+          <p>Research grade.</p>
+        </article>
+        <article class="product-card">
+          <div class="product-card-heading">
+            <span class="product-code">NE-CB-004</span>
+            <span class="product-category">Customized Carbon, Graphene &amp; Nanotube Materials</span>
+          </div>
+          <h4>Multi-Walled Carbon Nanotubes (MWCNTs)</h4>
+          <p>Pristine or functionalized options.</p>
+        </article>
+        <article class="product-card">
+          <div class="product-card-heading">
+            <span class="product-code">NE-CB-005</span>
+            <span class="product-category">Customized Carbon, Graphene &amp; Nanotube Materials</span>
+          </div>
+          <h4>Single-Walled Carbon Nanotubes (SWCNTs)</h4>
+          <p>Research grade.</p>
+        </article>
+        <article class="product-card">
+          <div class="product-card-heading">
+            <span class="product-code">NE-CB-006</span>
+            <span class="product-category">Customized Carbon, Graphene &amp; Nanotube Materials</span>
+          </div>
+          <h4>Carbon Nanoparticles</h4>
+          <p>Research grade.</p>
+        </article>
+        <article class="product-card">
+          <div class="product-card-heading">
+            <span class="product-code">NE-CB-007</span>
+            <span class="product-category">Customized Carbon, Graphene &amp; Nanotube Materials</span>
+          </div>
+          <h4>Activated Carbon Nanomaterial</h4>
+          <p>For adsorption and sensing research.</p>
+        </article>
+        <article class="product-card">
+          <div class="product-card-heading">
+            <span class="product-code">NE-CB-008</span>
+            <span class="product-category">Customized Carbon, Graphene &amp; Nanotube Materials</span>
+          </div>
+          <h4>Carbon-Nanomaterial Dispersions</h4>
+          <p>Custom solvent and concentration subject to compatibility.</p>
+        </article>
+        <article class="product-card">
+          <div class="product-card-heading">
+            <span class="product-code">NE-CB-009</span>
+            <span class="product-category">Customized Carbon, Graphene &amp; Nanotube Materials</span>
+          </div>
+          <h4>Nanocarbon Sensor Composites</h4>
+          <p>Application-development service.</p>
+        </article>
+        </div>
+      </section>
+      <section class="product-category-section" aria-labelledby="category-5">
+        <h3 id="category-5">Customized Biomedical &amp; Biofunctional Nanomaterials</h3>
+        <div class="products-grid">
+        <article class="product-card">
+          <div class="product-card-heading">
+            <span class="product-code">NE-BM-001</span>
+            <span class="product-category">Customized Biomedical &amp; Biofunctional Nanomaterials</span>
+          </div>
+          <h4>Hydroxyapatite Nanoparticles</h4>
+          <p>For bone and biomaterial research.</p>
+        </article>
+        <article class="product-card">
+          <div class="product-card-heading">
+            <span class="product-code">NE-BM-002</span>
+            <span class="product-category">Customized Biomedical &amp; Biofunctional Nanomaterials</span>
+          </div>
+          <h4>Chitosan Nanoparticles</h4>
+          <p>For delivery and coating research.</p>
+        </article>
+        <article class="product-card">
+          <div class="product-card-heading">
+            <span class="product-code">NE-BM-003</span>
+            <span class="product-category">Customized Biomedical &amp; Biofunctional Nanomaterials</span>
+          </div>
+          <h4>Chitosan-Based Nanocomposites</h4>
+          <p>Custom formulation.</p>
+        </article>
+        <article class="product-card">
+          <div class="product-card-heading">
+            <span class="product-code">NE-BM-004</span>
+            <span class="product-category">Customized Biomedical &amp; Biofunctional Nanomaterials</span>
+          </div>
+          <h4>Curcumin Nanoformulations</h4>
+          <p>Research-use formulation.</p>
+        </article>
+        <article class="product-card">
+          <div class="product-card-heading">
+            <span class="product-code">NE-BM-005</span>
+            <span class="product-category">Customized Biomedical &amp; Biofunctional Nanomaterials</span>
+          </div>
+          <h4>Curcumin-Metal Nanocomposite Systems</h4>
+          <p>Custom research formulation.</p>
+        </article>
+        <article class="product-card">
+          <div class="product-card-heading">
+            <span class="product-code">NE-BM-006</span>
+            <span class="product-category">Customized Biomedical &amp; Biofunctional Nanomaterials</span>
+          </div>
+          <h4>Magnetic Biofunctional Nanoparticles</h4>
+          <p>For separation, imaging and delivery research.</p>
+        </article>
+        <article class="product-card">
+          <div class="product-card-heading">
+            <span class="product-code">NE-BM-007</span>
+            <span class="product-category">Customized Biomedical &amp; Biofunctional Nanomaterials</span>
+          </div>
+          <h4>Fluorescent Nanoparticle Probes</h4>
+          <p>For optical and cell-labeling research.</p>
+        </article>
+        <article class="product-card">
+          <div class="product-card-heading">
+            <span class="product-code">NE-BM-008</span>
+            <span class="product-category">Customized Biomedical &amp; Biofunctional Nanomaterials</span>
+          </div>
+          <h4>Targeted Nanocarrier Prototypes</h4>
+          <p>Ligand-functionalized research systems.</p>
+        </article>
+        <article class="product-card">
+          <div class="product-card-heading">
+            <span class="product-code">NE-BM-009</span>
+            <span class="product-category">Customized Biomedical &amp; Biofunctional Nanomaterials</span>
+          </div>
+          <h4>Nano-Bio Interface Evaluation Support</h4>
+          <p>Collaborative R&amp;D service.</p>
+        </article>
+        </div>
+      </section>
+      <section class="product-category-section" aria-labelledby="category-6">
+        <h3 id="category-6">Customized Photonics, Spectroscopy &amp; Sensor Materials</h3>
+        <div class="products-grid">
+        <article class="product-card">
+          <div class="product-card-heading">
+            <span class="product-code">NE-PH-001</span>
+            <span class="product-category">Customized Photonics, Spectroscopy &amp; Sensor Materials</span>
+          </div>
+          <h4>SERS-Active Silver Nanostructures</h4>
+          <p>Research substrates and colloids.</p>
+        </article>
+        <article class="product-card">
+          <div class="product-card-heading">
+            <span class="product-code">NE-PH-002</span>
+            <span class="product-category">Customized Photonics, Spectroscopy &amp; Sensor Materials</span>
+          </div>
+          <h4>SERS-Active Gold Nanostructures</h4>
+          <p>Research substrates and colloids.</p>
+        </article>
+        <article class="product-card">
+          <div class="product-card-heading">
+            <span class="product-code">NE-PH-003</span>
+            <span class="product-category">Customized Photonics, Spectroscopy &amp; Sensor Materials</span>
+          </div>
+          <h4>Rare-Earth Fluorescent Phosphors</h4>
+          <p>Custom host and dopant combinations.</p>
+        </article>
+        <article class="product-card">
+          <div class="product-card-heading">
+            <span class="product-code">NE-PH-004</span>
+            <span class="product-category">Customized Photonics, Spectroscopy &amp; Sensor Materials</span>
+          </div>
+          <h4>Upconversion Phosphor Systems</h4>
+          <p>Near-infrared-to-visible research materials.</p>
+        </article>
+        <article class="product-card">
+          <div class="product-card-heading">
+            <span class="product-code">NE-PH-005</span>
+            <span class="product-category">Customized Photonics, Spectroscopy &amp; Sensor Materials</span>
+          </div>
+          <h4>Magnetofluorescent Probes</h4>
+          <p>Multimodal research systems.</p>
+        </article>
+        <article class="product-card">
+          <div class="product-card-heading">
+            <span class="product-code">NE-PH-006</span>
+            <span class="product-category">Customized Photonics, Spectroscopy &amp; Sensor Materials</span>
+          </div>
+          <h4>Optical Sensor Nanocomposites</h4>
+          <p>Application-specific development.</p>
+        </article>
+        <article class="product-card">
+          <div class="product-card-heading">
+            <span class="product-code">NE-PH-007</span>
+            <span class="product-category">Customized Photonics, Spectroscopy &amp; Sensor Materials</span>
+          </div>
+          <h4>Gas-Sensing Nanomaterial Formulations</h4>
+          <p>Metal-oxide or carbon hybrid systems.</p>
+        </article>
+        <article class="product-card">
+          <div class="product-card-heading">
+            <span class="product-code">NE-PH-008</span>
+            <span class="product-category">Customized Photonics, Spectroscopy &amp; Sensor Materials</span>
+          </div>
+          <h4>Spectroscopy Calibration / Test Materials</h4>
+          <p>Custom research sets.</p>
+        </article>
+        </div>
+      </section>
+    </section>
+    <section class="products-catalogue">
+      <div>
+        <h2>Explore the full catalogue</h2>
+        <p>View the NanoEra Medicare Product Catalogue 2026?27 for more information.</p>
+      </div>
+      <span class="products-catalogue-note">NanoEra Medicare Product Catalogue 2026?27</span>
+    </section>
+  </main>
+  <footer class="footer">
+    <div class="footer-inner">
+      <div><h2>Contact Us</h2><p>Let?s discuss your research collaboration opportunities</p></div>
+      <p>Dr. Ranu Dutta ? NanoEra Medicare Pvt. Ltd.</p>
+    </div>
+    <div class="footer-bottom">? Copyright 2025 Dr. Ranu Dutta. All rights reserved.</div>
+  </footer>
+</body>
+</html>
